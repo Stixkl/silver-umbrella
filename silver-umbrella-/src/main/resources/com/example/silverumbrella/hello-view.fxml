@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.silverumbrella.controller.HelloController">
+   <children>
+      <ImageView fitHeight="700.0" fitWidth="701.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../images/image0_0.jpg" />
+         </image></ImageView>
+      <ComboBox fx:id="Gamemode" layoutX="277.0" layoutY="331.0" prefHeight="54.0" prefWidth="147.0" promptText="Select Gamemode">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Graph list" />
+               <String fx:value="Graph matrix" />
+            </FXCollections>
+         </items>
+         <effect>
+            <InnerShadow />
+         </effect>
+      </ComboBox>
+      <Button fx:id="startButton" layoutX="267.0" layoutY="503.0" mnemonicParsing="false" onAction="#onButtonClick" prefHeight="76.0" prefWidth="167.0" text="Start">
+         <font>
+            <Font size="34.0" />
+         </font>
+         <effect>
+            <InnerShadow />
+         </effect></Button>
+      <Label fx:id="welcomeText" layoutX="125.0" layoutY="33.0" prefHeight="104.0" prefWidth="497.0" text="MAZE RUNNER" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="71.0" />
+         </font>
+         <effect>
+            <Glow level="1.0" />
+         </effect>
+      </Label>
+      <TextField fx:id="PlayerOne" layoutX="41.0" layoutY="339.0" prefHeight="38.0" prefWidth="167.0" promptText="Player username">
+         <effect>
+            <InnerShadow />
+         </effect></TextField>
+      <Label layoutX="41.0" layoutY="302.0" prefHeight="24.0" prefWidth="105.0" text="PLAYER 1" textFill="WHITE">
+         <effect>
+            <Glow level="1.0" />
+         </effect></Label>
+      <TextField fx:id="PlayerTwo" layoutX="500.0" layoutY="339.0" prefHeight="38.0" prefWidth="167.0" promptText="Player username">
+         <effect>
+            <InnerShadow />
+         </effect></TextField>
+      <Label layoutX="615.0" layoutY="302.0" prefHeight="24.0" prefWidth="55.0" text="PLAYER 2" textFill="WHITE">
+         <effect>
+            <Glow level="1.0" />
+         </effect></Label>
+   </children>
+</AnchorPane>
