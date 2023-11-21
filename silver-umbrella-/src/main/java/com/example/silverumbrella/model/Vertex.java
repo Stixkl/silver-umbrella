@@ -1,15 +1,26 @@
 package com.example.silverumbrella.model;
 
-public class Path<K extends Comparable<K>,V>{
+import javafx.scene.control.RadioButton;
+
+import java.util.ArrayList;
+
+public class Vertex<K extends Comparable<K>,V> extends RadioButton {
+
     private int time;
+
     private int distance;
+
     private Color color;
-    private Path<K,V> predecessor;
+
+    private Vertex<K,V> predecessor;
+
     private final V value;
+
     private final K key;
+
     private int finishTime;
 
-    public Path(K key, V value) {
+    public Vertex(K key, V value) {
         time = 0;
         this.key = key;
         this.value = value;
@@ -46,7 +57,7 @@ public class Path<K extends Comparable<K>,V>{
         return key;
     }
 
-    public void setPredecessor(Path<K, V> predecessor) {
+    public void setPredecessor(Vertex<K, V> predecessor) {
         this.predecessor = predecessor;
 
     }
@@ -54,7 +65,7 @@ public class Path<K extends Comparable<K>,V>{
     public int getDiscoveryTime() {
         return time;
     }
-    public Path<K, V> getPredecessor() {
+    public Vertex<K, V> getPredecessor() {
         return predecessor;
 
     }

@@ -2,42 +2,43 @@ package com.example.silverumbrella.model;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Hashtable;
 
 public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
 
-    private final HashMap<K,NewVertexList<K,V>> vertexs;
+    private Hashtable<K, NewVertexList<K,V>> edges;
 
     public GraphList(EGraph type) {
         super(type);
-        vertexs = new HashMap<>();
+        edges = new Hashtable<>();
     }
 
     @Override
     public boolean addVertex(K key, V value) {
-        boolean added = false;
-        if(!vertexs.containsKey(key)){
-            vertexs.put(key,new NewVertexList<>(key,value));
-            vertexesPosition.put(key,numberVertexsCurrent);
-            numberVertexsCurrent++;
+        boolean flag = false;
+        if(!edges.containsKey(key)){
+            edges.put(key,new NewVertexList<>(key,value));
+            vertexPosition.put(key,vertexNumber);
+            vertexNumber++;
 
-            added = true;
+            flag = true;
         }
-        return added;
+        return flag;
     }
 
     @Override
     public boolean removeVertex(K key) {
         boolean removed = false;
-        NewVertexList<K,V> vertex = vertexs.remove(key);
+        NewVertexList<K,V> vertex = edges.remove(key);
         if(vertex != null){
             removed = true;
 
-            for(K KeyVertex : vertexs.keySet()){
-                NewVertexList<K,V> vertexList = vertexs.get(KeyVertex);
+            for(K KeyVertex : edges.keySet()){
+                NewVertexList<K,V> vertexList = edges.get(KeyVertex);
                 LinkedList<Arista<K,V>> Aristas = vertexList.getAristas();
                 for (Iterator<Arista<K, V>> iterator = Aristas.iterator(); iterator.hasNext();) {
                     Arista<K, V> Arista = iterator.next();
-                    if (Arista.getDestination().getKey().compareTo(key) == 0) {
+                    if (Arista.getfinalVertex().getKey().compareTo(key) == 0) {
                         iterator.remove();
 
                     }
@@ -48,41 +49,41 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
     }
 
     @Override
-    public Path<K, V> getVertex(K key) {
-        return vertexs.get(key);
+    public Vertex<K, V> getVertex(K key) {
+        return edges.get(key);
     }
 
-    public HashMap<K,NewVertexList<K,V>> getVertexs() {
-        return vertexs;
+    public Hashtable<K,NewVertexList<K,V>> getvertex() {
+        return edges;
     }
 
 
     @Override
     public boolean addArista(K key1, K key2, int weight) {
-        boolean added = false;
-        NewVertexList<K, V> v1 = vertexs.get(key1);
-        NewVertexList<K, V> v2 = vertexs.get(key2);
+        boolean flag = false;
+        NewVertexList<K, V> v1 = edges.get(key1);
+        NewVertexList<K, V> v2 = edges.get(key2);
         Arista<K,V> Arista = new Arista<>(v1,v2,weight);
         v1.getAristas().add(Arista);
         aristas.add(Arista);
-        added = true;
+        flag = true;
         if(!directed){
             Arista<K,V> Arista2 = new Arista<>(v2,v1,weight);
             v2.getAristas().add(Arista2);
             aristas.add(Arista2);
         }
-        return added;
+        return flag;
     }
 
     @Override
     public boolean removeArista(K key1, K key2) {
         boolean removed = false;
-        NewVertexList<K,V> v1 = vertexs.get(key1);
-        NewVertexList<K,V> v2 = vertexs.get(key2);
+        NewVertexList<K,V> v1 = edges.get(key1);
+        NewVertexList<K,V> v2 = edges.get(key2);
         List<Arista<K, V>> AristasV1 = v1.getAristas();
         for (Iterator<Arista<K, V>> iterator = AristasV1.iterator(); iterator.hasNext();) {
             Arista<K, V> Arista = iterator.next();
-            if (Arista.getDestination().getKey().compareTo(key2) == 0) {
+            if (Arista.getfinalVertex().getKey().compareTo(key2) == 0) {
                 iterator.remove();
                 removed = true;
             }
@@ -91,23 +92,26 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
             List<Arista<K, V>> AristasV2 = v2.getAristas();
             for (Iterator<Arista<K, V>> iterator = AristasV2.iterator(); iterator.hasNext();) {
                 Arista<K, V> Arista = iterator.next();
-                if (Arista.getDestination().getKey().compareTo(key1) == 0) {
+                if (Arista.getfinalVertex().getKey().compareTo(key1) == 0) {
                     iterator.remove();
                 }
             }
         }
         return removed;
     }
-
+    private int vertexIndex(K key){
+        Integer index = vertexPosition.get(key);
+        return index == null ? -1 : index;
+    }
 
     public boolean adjacent(K keyVertex1, K keyVertex2) {
         boolean adjacent = false;
-        NewVertexList<K,V> v1 = vertexs.get(keyVertex1);
-        NewVertexList<K,V> v2 = vertexs.get(keyVertex2);
+        NewVertexList<K,V> v1 = edges.get(keyVertex1);
+        NewVertexList<K,V> v2 = edges.get(keyVertex2);
         if(v1!=null && v2!=null){
             LinkedList<Arista<K,V>> Aristas1 = v1.getAristas();
             for(Arista<K,V> Arista : Aristas1){
-                if(Arista.getDestination().getKey().compareTo(keyVertex2)==0){
+                if(Arista.getfinalVertex().getKey().compareTo(keyVertex2)==0){
                     adjacent = true;
                     break;
                 }
@@ -116,23 +120,19 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
 
         return adjacent;
     }
-    private int vertexsIndex(K key){
-        Integer index = vertexesPosition.get(key);
-        return index == null ? -1 : index;
-    }
 
 
     @Override
     public void BFS(K keyVertex) {
 
-        for(K key:vertexs.keySet()){
-            Path<K,V> vertex = vertexs.get(key);
+        for(K key:edges.keySet()){
+            Vertex<K,V> vertex = edges.get(key);
             vertex.setColor(Color.WHITE);
             vertex.setDistance(infinite);
             vertex.setPredecessor(null);
         }
 
-        NewVertexList<K,V> vertexL = vertexs.get(keyVertex);
+        NewVertexList<K,V> vertexL = edges.get(keyVertex);
 
         vertexL.setColor(Color.GRAY);
         vertexL.setDistance(0);
@@ -143,7 +143,7 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
             LinkedList<Arista<K,V>> Aristas = vertex.getAristas();
             for(Arista<K,V> Arista : Aristas){
 
-                NewVertexList<K,V> vertex2 = (NewVertexList<K, V>) Arista.getDestination();
+                NewVertexList<K,V> vertex2 = (NewVertexList<K, V>) Arista.getfinalVertex();
                 if(vertex2.getColor()==Color.WHITE){
                     vertex2.setColor(Color.GRAY);
                     vertex2.setDistance(vertex.getDistance()+1);
@@ -155,14 +155,15 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
         }
     }
 
+    @Override
     public void DFS(){
-        if(vertexs.size()>0){
-            for(NewVertexList<K,V> vertex : vertexs.values()){
+        if(edges.size()>0){
+            for(NewVertexList<K,V> vertex : edges.values()){
                 vertex.setColor(Color.WHITE);
                 vertex.setPredecessor(null);
             }
             time = 0;
-            for(NewVertexList<K,V> vertex : vertexs.values()){
+            for(NewVertexList<K,V> vertex : edges.values()){
                 if(vertex.getColor()==Color.WHITE){
                     DFSVisit(vertex, time);
                 }
@@ -177,7 +178,7 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
         vertex.setColor(Color.GRAY);
         LinkedList<Arista<K,V>> Aristas = vertex.getAristas();
         for(Arista<K,V> Arista : Aristas){
-            NewVertexList<K,V> vertex2 = (NewVertexList<K, V>) Arista.getDestination();
+            NewVertexList<K,V> vertex2 = (NewVertexList<K, V>) Arista.getfinalVertex();
             if(vertex2.getColor()==Color.WHITE){
                 vertex2.setPredecessor(vertex);
                 DFSVisit(vertex2,time);
@@ -190,22 +191,22 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
 
 
     @Override
-    public ArrayList<Integer> dijkstra(K keyVertexSource) {
-        for(NewVertexList<K,V> vertex : vertexs.values()){
-            if(vertex.getKey().compareTo(keyVertexSource)!=0)
+    public ArrayList<Integer> dijkstra(K keyvertexource) {
+        for(NewVertexList<K,V> vertex : edges.values()){
+            if(vertex.getKey().compareTo(keyvertexource)!=0)
                 vertex.setDistance(infinite);
             vertex.setPredecessor(null);
         }
 
-        PriorityQueue<NewVertexList<K,V>> priority = new PriorityQueue<>(Comparator.comparingInt(Path::getDistance));
-        for(NewVertexList<K,V> vertex : vertexs.values()){
+        PriorityQueue<NewVertexList<K,V>> priority = new PriorityQueue<>(Comparator.comparingInt(Vertex::getDistance));
+        for(NewVertexList<K,V> vertex : edges.values()){
             priority.offer(vertex);
         }
         while(!priority.isEmpty()){
             NewVertexList<K,V> vertex = priority.poll();
             LinkedList<Arista<K,V>> Aristas = vertex.getAristas();
             for(Arista<K,V> Arista : Aristas){
-                NewVertexList<K,V> vertex2 = (NewVertexList<K, V>) Arista.getDestination();
+                NewVertexList<K,V> vertex2 = (NewVertexList<K, V>) Arista.getfinalVertex();
                 int weight = Arista.getWeight()+vertex.getDistance();
                 if(weight<vertex2.getDistance()){
                     priority.remove(vertex2);
@@ -215,21 +216,21 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
                 }
             }
         }
-        return vertexs.values().stream().map(Path::getDistance).collect(Collectors.toCollection(ArrayList::new));
+        return edges.values().stream().map(Vertex::getDistance).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
     public ArrayList<Arista<K, V>> kruskal() {
         if(!directed){
             ArrayList<Arista<K,V>> mst = new ArrayList<>();
-            Union unionFind = new Union(vertexs.size());
+            Union unionFind = new Union(edges.size());
             aristas.sort(Comparator.comparingInt(Arista::getWeight));
             for(Arista<K,V> Arista : aristas){
-                NewVertexList<K,V> vertex1 = (NewVertexList<K, V>) Arista.getStart();
-                NewVertexList<K,V> vertex2 = (NewVertexList<K, V>) Arista.getDestination();
-                if(unionFind.find(vertexsIndex(vertex1.getKey()))!=unionFind.find(vertexsIndex(vertex2.getKey()))){
+                NewVertexList<K,V> vertex1 = (NewVertexList<K, V>) Arista.getinitialVertex();
+                NewVertexList<K,V> vertex2 = (NewVertexList<K, V>) Arista.getfinalVertex();
+                if(unionFind.find(vertexIndex(vertex1.getKey()))!=unionFind.find(vertexIndex(vertex2.getKey()))){
                     mst.add(Arista);
-                    unionFind.union(vertexsIndex(vertex1.getKey()),vertexsIndex(vertex2.getKey()));
+                    unionFind.union(vertexIndex(vertex1.getKey()),vertexIndex(vertex2.getKey()));
                 }
             }
             return mst;
@@ -237,18 +238,19 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
         return null;
     }
 
+    @Override
     public ArrayList<Arista<K, V>> prim() {
         if (!directed) {
             HashSet<K> visited = new HashSet<>();
             PriorityQueue<Arista<K, V>> minHeap = new PriorityQueue<>(Comparator.comparingInt(Arista::getWeight));
             ArrayList<Arista<K, V>> minimumSpanningTree = new ArrayList<>();
-            K startVertexKey = vertexs.keySet().iterator().next();
+            K startVertexKey = edges.keySet().iterator().next();
             visited.add(startVertexKey);
             addAristasToHeap(startVertexKey, minHeap);
-            while (visited.size() < vertexs.size()) {
+            while (visited.size() < edges.size()) {
                 Arista<K, V> minArista = minHeap.poll();
-                K fromKey = minArista.getStart().getKey();
-                K toKey = minArista.getDestination().getKey();
+                K fromKey = minArista.getinitialVertex().getKey();
+                K toKey = minArista.getfinalVertex().getKey();
 
                 if (!visited.contains(toKey)) {
                     visited.add(toKey);
@@ -263,18 +265,18 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
     }
 
     private void addAristasToHeap(K key, PriorityQueue<Arista<K, V>> minHeap) {
-        NewVertexList<K, V> vertex = vertexs.get(key);
+        NewVertexList<K, V> vertex = edges.get(key);
         for (Arista<K, V> Arista : vertex.getAristas()) {
-            K neighborKey = Arista.getDestination().getKey();
+            K neighborKey = Arista.getfinalVertex().getKey();
             int weight = Arista.getWeight();
-            if (!minHeap.contains(new Arista<>(vertex, vertexs.get(neighborKey), weight))) {
-                minHeap.add(new Arista<>(vertex, vertexs.get(neighborKey), weight));
+            if (!minHeap.contains(new Arista<>(vertex, edges.get(neighborKey), weight))) {
+                minHeap.add(new Arista<>(vertex, edges.get(neighborKey), weight));
             }
         }
     }
 
-    public ArrayList<ArrayList<Integer>> floyd_warshall() {
-        int size = numberVertexsCurrent;
+    public ArrayList<ArrayList<Integer>> floyd_Mayweather() {
+        int size = vertexNumber;
         ArrayList<ArrayList<Integer>> dist = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
@@ -290,8 +292,8 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
         }
 
         for (Arista<K, V> Arista : aristas) {
-            int fromIndex = vertexsIndex(Arista.getStart().getKey());
-            int toIndex = vertexsIndex(Arista.getDestination().getKey());
+            int fromIndex = vertexIndex(Arista.getinitialVertex().getKey());
+            int toIndex = vertexIndex(Arista.getfinalVertex().getKey());
             dist.get(fromIndex).set(toIndex, Arista.getWeight());
         }
 

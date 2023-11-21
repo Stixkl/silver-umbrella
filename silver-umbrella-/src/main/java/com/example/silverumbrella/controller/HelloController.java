@@ -2,13 +2,21 @@ package com.example.silverumbrella.controller;
 
 import com.example.silverumbrella.HelloApplication;
 import com.example.silverumbrella.model.GameModeType;
+import com.example.silverumbrella.model.MazeGraph;
 import com.example.silverumbrella.model.Player;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class HelloController {
 
+    private MazeController mazeController;
     @FXML
     private Label welcomeText;
     @FXML
@@ -34,14 +42,34 @@ public class HelloController {
             if (gamemode.equals("Graph matrix")) {
                 gamemodeType = GameModeType.GRAPH_MATRIX;
             }
-            MazeController.setGamemode(gamemodeType);
+            mazeController = new MazeController();
             Player player1 = new Player(PlayerOne.getText(), 0);
             Player player2 = new Player(PlayerTwo.getText(), 0);
-            MazeController.setPlayer1(player1);
-            MazeController.setPlayer2(player2);
+            mazeController.setPlayer1(player1);
+            mazeController.setPlayer2(player2);
             Stage stage = (Stage) startButton.getScene().getWindow();
             stage.close();
-            HelloApplication.openWindow("maze-game.fxml", 900,700);
+            //HelloApplication.openWindow("maze-game.fxml", 900,700);
+            MazeController gameController = obtainControllerWindow("maze-game", "m").getController();
+            gameController.addGamemode(gamemodeType);
+            mazeController.setGamemode(gamemodeType);
+        }
+    }
+
+    public FXMLLoader obtainControllerWindow(String fxmlName, String stageTitle) {
+        Parent rootNode;
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlName + ".fxml"));
+
+        Stage newStage = new Stage();
+        try {
+            newStage.setTitle(stageTitle);
+            newStage.getIcons().add(new Image("file:" + (HelloApplication.class.getResource("/images/Image 2.png")).getPath()));
+            rootNode = fxmlLoader.load();
+            newStage.setScene(new Scene(rootNode));
+            newStage.show();
+            return fxmlLoader;
+        } catch (IOException e) {
+            return null;
         }
     }
 
