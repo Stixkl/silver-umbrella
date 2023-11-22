@@ -189,6 +189,45 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
         vertex.setFinishTime(time);
     }
 
+    public ArrayList<Integer> dijkstra2(K startNode, K endNode) {
+        for (NewVertexList<K, V> vertex : edges.values()) {
+            if (vertex.getKey().compareTo(startNode) != 0)
+                vertex.setDistance(infinite);
+            vertex.setPredecessor(null);
+        }
+
+        PriorityQueue<NewVertexList<K, V>> priority = new PriorityQueue<>(Comparator.comparingInt(Vertex::getDistance));
+        for (NewVertexList<K, V> vertex : edges.values()) {
+            priority.offer(vertex);
+        }
+
+        while (!priority.isEmpty()) {
+            NewVertexList<K, V> vertex = priority.poll();
+            LinkedList<Arista<K, V>> edges = vertex.getAristas();
+            for (Arista<K, V> edge : edges) {
+                NewVertexList<K, V> vertex2 = (NewVertexList<K, V>) edge.getfinalVertex();
+                int weight = edge.getWeight() + vertex.getDistance();
+                if (weight < vertex2.getDistance()) {
+                    priority.remove(vertex2);
+                    vertex2.setDistance(weight);
+                    vertex2.setPredecessor(vertex);
+                    priority.offer(vertex2);
+                }
+            }
+        }
+
+        ArrayList<Integer> shortestPath = new ArrayList<>();
+        NewVertexList<K, V> currentNode = edges.get(endNode);
+        while (currentNode != null && !currentNode.getKey().equals(startNode)) {
+            shortestPath.add((Integer) currentNode.getKey());
+            currentNode = (NewVertexList<K, V>) currentNode.getPredecessor();
+        }
+        shortestPath.add((Integer) startNode);
+        Collections.reverse(shortestPath);
+
+        return shortestPath;
+    }
+
 
     @Override
     public ArrayList<Integer> dijkstra(K keyvertexource) {

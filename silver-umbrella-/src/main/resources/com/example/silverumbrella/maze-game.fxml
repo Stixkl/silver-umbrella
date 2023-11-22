@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
@@ -12,135 +11,25 @@
          <image>
             <Image url="@../../../images/Final_Maze2.png" />
          </image></ImageView>
-      <Label fx:id="playerOneTag" layoutX="714.0" layoutY="222.0" prefHeight="35.0" prefWidth="174.0" text="Label" textAlignment="CENTER" />
-      <Label fx:id="playerTwoTag" layoutX="714.0" layoutY="471.0" prefHeight="35.0" prefWidth="174.0" text="Label" textAlignment="CENTER" />
-      <RadioButton fx:id="radioButton" layoutX="360.0" layoutY="670.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" opacity="0.0" text="4" textFill="RED" />
+      <Label fx:id="playerOneTag" layoutX="742.0" layoutY="222.0" prefHeight="35.0" prefWidth="160.0" text="Label" textAlignment="CENTER" />
+      <Label fx:id="playerTwoTag" layoutX="746.0" layoutY="471.0" prefHeight="35.0" prefWidth="160.0" text="Label" textAlignment="CENTER" />
       <Label alignment="TOP_LEFT" layoutX="714.0" layoutY="8.0" prefHeight="197.0" prefWidth="174.0" text="This is a turn-based game that consists of reaching the goal (the center) with as few points as possible, the player who accomplishes this wins. Throughout the course, you will find powers that will facilitate the arrival at the goal, you can also sabotage the players with these powers. The player who moves is painted red." wrapText="true" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="17.0" layoutX="699.0" layoutY="205.0" stroke="BLACK" strokeType="INSIDE" width="204.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="700.0" layoutX="692.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="17.0" layoutX="696.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="210.0" />
-      <Button layoutX="714.0" layoutY="293.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="63.0" text="Dijkstra" />
-      <Button layoutX="714.0" layoutY="363.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="63.0" text="Poder 2" />
-      <Button layoutX="714.0" layoutY="544.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="63.0" text="Dijkstra" />
-      <Button layoutX="714.0" layoutY="613.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="63.0" text="Poder 2" />
-      <Label fx:id="playerOnePoints" layoutX="714.0" layoutY="256.0" prefHeight="17.0" prefWidth="174.0" text="Label" />
-      <Label fx:id="playerTwoPoints" layoutX="714.0" layoutY="506.0" prefHeight="17.0" prefWidth="174.0" text="Label" />
+      <Button fx:id="dijkstraPower1" layoutX="714.0" layoutY="293.0" mnemonicParsing="false" onAction="#onDijkstraButtonClick" prefHeight="44.0" prefWidth="63.0" text="Dijkstra" />
+      <Button fx:id="jugadorPoder1" layoutX="714.0" layoutY="363.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="63.0" text="Poder 2" />
+      <Button fx:id="dijkstraPower2" layoutX="714.0" layoutY="544.0" mnemonicParsing="false" onAction="#onDijkstraButtonClick" prefHeight="44.0" prefWidth="63.0" text="Dijkstra" />
+      <Button fx:id="jugadorPoder2" layoutX="714.0" layoutY="613.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="63.0" text="Poder 2" />
+      <Label fx:id="playerOnePoints" layoutX="742.0" layoutY="257.0" prefHeight="17.0" prefWidth="160.0" text="Label" />
+      <Label fx:id="playerTwoPoints" layoutX="746.0" layoutY="506.0" prefHeight="17.0" prefWidth="160.0" text="Label" />
       <Label fx:id="round1" layoutX="815.0" layoutY="231.0" prefHeight="17.0" prefWidth="78.0" text="Round: 0" />
       <Label fx:id="round2" layoutX="815.0" layoutY="480.0" prefHeight="17.0" prefWidth="78.0" text="Round: 0" />
       <Button fx:id="goButtonPlayer1" layoutX="815.0" layoutY="293.0" mnemonicParsing="false" onAction="#onButtonPressed" prefHeight="44.0" prefWidth="63.0" text="Go" />
       <Label fx:id="ponderacion1" layoutX="815.0" layoutY="363.0" text="Label" />
       <Label fx:id="ponderacion2" layoutX="815.0" layoutY="611.0" text="Label" />
       <Button fx:id="goButtonPlayer2" layoutX="815.0" layoutY="544.0" mnemonicParsing="false" onAction="#onButtonPressed" prefHeight="44.0" prefWidth="63.0" text="Go" />
-      <RadioButton fx:id="radioButton1" layoutX="428.0" layoutY="603.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="15" textFill="RED" />
-      <RadioButton fx:id="radioButton2" layoutX="464.0" layoutY="566.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="21" textFill="RED" />
-      <RadioButton fx:id="radioButton3" layoutX="533.0" layoutY="670.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="6" textFill="RED" />
-      <RadioButton fx:id="radioButton4" layoutX="393.0" layoutY="670.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="5" textFill="RED" />
-      <RadioButton fx:id="radioButton5" layoutX="393.0" layoutY="566.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="20" textFill="RED" />
-      <RadioButton fx:id="radioButton6" layoutX="255.0" layoutY="603.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="13" textFill="RED" />
-      <RadioButton fx:id="radioButton7" layoutX="360.0" layoutY="603.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="14" textFill="RED" />
-      <RadioButton fx:id="radioButton8" layoutX="533.0" layoutY="536.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="29" textFill="RED" />
-      <RadioButton fx:id="radioButton9" layoutX="325.0" layoutY="635.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" prefHeight="17.0" prefWidth="28.0" text="8" textFill="RED" />
-      <RadioButton fx:id="radioButton10" layoutX="255.0" layoutY="670.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="3" textFill="RED" />
-      <RadioButton fx:id="radioButton11" layoutX="360.0" layoutY="536.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="26" textFill="RED" />
-      <RadioButton fx:id="radioButton12" layoutX="287.0" layoutY="566.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="19" textFill="RED" />
-      <RadioButton fx:id="radioButton13" layoutX="464.0" layoutY="536.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="27" textFill="RED" />
-      <RadioButton fx:id="radioButton14" layoutX="255.0" layoutY="498.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="34" textFill="RED" />
-      <RadioButton fx:id="radioButton15" layoutX="219.0" layoutY="566.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="18" textFill="RED" />
-      <RadioButton fx:id="radioButton16" layoutX="186.0" layoutY="536.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="25" textFill="RED" />
-      <RadioButton fx:id="radioButton17" layoutX="219.0" layoutY="603.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="12" textFill="RED" />
-      <RadioButton fx:id="radioButton18" layoutX="219.0" layoutY="670.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="2" textFill="RED" />
-      <RadioButton fx:id="radioButton19" layoutX="360.0" layoutY="220.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="84" textFill="RED" />
-      <RadioButton fx:id="radioButton20" layoutX="116.0" layoutY="603.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="11" textFill="RED" />
-      <RadioButton fx:id="radioButton21" layoutX="150.0" layoutY="566.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="17" textFill="RED" />
-      <RadioButton fx:id="radioButton22" layoutX="186.0" layoutY="498.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="33" textFill="RED" />
-      <RadioButton fx:id="radioButton23" layoutX="80.0" layoutY="566.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="16" textFill="RED" />
-      <RadioButton fx:id="radioButton24" layoutX="14.0" layoutY="603.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="10" textFill="RED" />
-      <RadioButton fx:id="radioButton26" layoutX="672.0" layoutY="670.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="7" textFill="RED" />
-      <RadioButton fx:id="radioButton27" layoutX="638.0" layoutY="635.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="9" textFill="RED" />
-      <RadioButton fx:id="radioButton28" layoutX="638.0" layoutY="566.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="22" textFill="RED" />
-      <RadioButton fx:id="radioButton29" layoutX="603.0" layoutY="536.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="30" textFill="RED" />
-      <RadioButton fx:id="radioButton30" layoutX="638.0" layoutY="498.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="38" textFill="RED" />
-      <RadioButton fx:id="radioButton31" layoutX="638.0" layoutY="429.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="51" textFill="RED" />
-      <RadioButton fx:id="radioButton32" layoutX="500.0" layoutY="536.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="28" textFill="RED" />
-      <RadioButton fx:id="radioButton33" layoutX="45.0" layoutY="534.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="23" textFill="RED" />
-      <RadioButton fx:id="radioButton34" layoutX="116.0" layoutY="534.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" rotate="15.3" text="24" textFill="RED" />
-      <RadioButton fx:id="radioButton35" layoutX="80.0" layoutY="429.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="45" textFill="RED" />
-      <RadioButton fx:id="radioButton36" layoutX="186.0" layoutY="429.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="46" textFill="RED" />
-      <RadioButton fx:id="radioButton37" layoutX="116.0" layoutY="463.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="40" textFill="RED" />
-      <RadioButton fx:id="radioButton38" layoutX="255.0" layoutY="463.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="41" textFill="RED" />
-      <RadioButton fx:id="radioButton39" layoutX="150.0" layoutY="45.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="102" textFill="RED" />
-      <RadioButton fx:id="radioButton40" layoutX="219.0" layoutY="394.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="53" textFill="RED" />
-      <RadioButton fx:id="radioButton41" layoutX="290.0" layoutY="392.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="54" textFill="RED" />
-      <RadioButton fx:id="radioButton42" layoutX="255.0" layoutY="324.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="65" textFill="RED" />
-      <RadioButton fx:id="radioButton43" layoutX="340.0" layoutY="337.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" prefHeight="17.0" prefWidth="41.0" text="66" textFill="RED">
-         <effect>
-            <Glow level="1.0" />
-         </effect></RadioButton>
-      <RadioButton fx:id="radioButton44" layoutX="287.0" layoutY="429.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="47" textFill="RED" />
-      <RadioButton fx:id="radioButton45" layoutX="290.0" layoutY="498.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="35" textFill="RED" />
-      <RadioButton fx:id="radioButton46" layoutX="428.0" layoutY="498.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="36" textFill="RED" />
-      <RadioButton fx:id="radioButton47" layoutX="428.0" layoutY="429.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="48" textFill="RED" />
-      <RadioButton fx:id="radioButton48" layoutX="393.0" layoutY="463.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="42" textFill="RED" />
-      <RadioButton fx:id="radioButton49" layoutX="464.0" layoutY="392.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="56" textFill="RED" />
-      <RadioButton fx:id="radioButton50" layoutX="325.0" layoutY="392.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="55" textFill="RED" />
-      <RadioButton fx:id="radioButton51" layoutX="500.0" layoutY="327.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="67" textFill="RED" />
-      <RadioButton fx:id="radioButton52" layoutX="186.0" layoutY="321.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="64" textFill="RED" />
-      <RadioButton fx:id="radioButton53" layoutX="219.0" layoutY="83.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="100" textFill="RED" />
-      <RadioButton fx:id="radioButton54" layoutX="255.0" layoutY="288.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="73" textFill="RED" />
-      <RadioButton fx:id="radioButton55" layoutX="14.0" layoutY="182.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="88" textFill="RED" />
-      <RadioButton fx:id="radioButton56" layoutX="13.0" layoutY="498.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" rotate="-3.2" text="32" textFill="RED" />
-      <RadioButton fx:id="radioButton57" layoutX="13.0" layoutY="321.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="63" textFill="RED" />
-      <RadioButton fx:id="radioButton58" layoutX="11.0" layoutY="466.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" rotate="7.6" text="39" textFill="RED" />
-      <RadioButton fx:id="radioButton59" layoutX="45.0" layoutY="394.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="52" textFill="RED" />
-      <RadioButton fx:id="radioButton60" layoutX="116.0" layoutY="363.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="58" textFill="RED" />
-      <RadioButton fx:id="radioButton61" layoutX="80.0" layoutY="285.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="70" textFill="RED" />
-      <RadioButton fx:id="radioButton62" layoutX="14.0" layoutY="285.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="69" textFill="RED" />
-      <RadioButton fx:id="radioButton63" layoutX="45.0" layoutY="220.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" rotate="3.4" text="81" textFill="RED" />
-      <RadioButton fx:id="radioButton64" layoutX="672.0" layoutY="536.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="31" textFill="RED" />
-      <RadioButton fx:id="radioButton65" layoutX="672.0" layoutY="463.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="44" textFill="RED" />
-      <RadioButton fx:id="radioButton66" layoutX="500.0" layoutY="498.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="37" textFill="RED" />
-      <RadioButton fx:id="radioButton67" layoutX="500.0" layoutY="429.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="49" textFill="RED" />
-      <RadioButton fx:id="radioButton68" layoutX="567.0" layoutY="428.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="50" textFill="RED" />
-      <RadioButton fx:id="radioButton69" layoutX="428.0" layoutY="117.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="98" textFill="RED" />
-      <RadioButton fx:id="radioButton70" layoutX="603.0" layoutY="463.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="43" textFill="RED" />
-      <RadioButton fx:id="radioButton71" layoutX="603.0" layoutY="363.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="62" textFill="RED" />
-      <RadioButton fx:id="radioButton72" layoutX="219.0" layoutY="358.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="59" textFill="RED" />
-      <RadioButton fx:id="radioButton73" layoutX="13.0" layoutY="11.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="107" textFill="RED" />
-      <RadioButton fx:id="radioButton74" layoutX="186.0" layoutY="285.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="72" textFill="RED" />
-      <RadioButton fx:id="radioButton75" layoutX="116.0" layoutY="288.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="71" textFill="RED" />
-      <RadioButton fx:id="radioButton76" layoutX="116.0" layoutY="256.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="77" textFill="RED" />
-      <RadioButton fx:id="radioButton77" layoutX="80.0" layoutY="152.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="91" textFill="RED" />
-      <RadioButton fx:id="radioButton78" layoutX="186.0" layoutY="152.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="92" textFill="RED" />
-      <RadioButton fx:id="radioButton79" layoutX="150.0" layoutY="182.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="89" textFill="RED" />
-      <RadioButton fx:id="radioButton80" layoutX="533.0" layoutY="394.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="57" textFill="RED" />
-      <RadioButton fx:id="radioButton81" layoutX="533.0" layoutY="358.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="61" textFill="RED" />
-      <RadioButton fx:id="radioButton82" layoutX="533.0" layoutY="288.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="76" textFill="RED" />
-      <RadioButton fx:id="radioButton83" layoutX="603.0" layoutY="83.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="101" textFill="RED" />
-      <RadioButton fx:id="radioButton84" layoutX="567.0" layoutY="151.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="94" textFill="RED" />
-      <RadioButton fx:id="radioButton85" layoutX="603.0" layoutY="321.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="68" textFill="RED" />
-      <RadioButton fx:id="radioButton86" layoutX="603.0" layoutY="256.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="79" textFill="RED" />
-      <RadioButton fx:id="radioButton87" layoutX="672.0" layoutY="256.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="80" textFill="RED" />
-      <RadioButton fx:id="radioButton88" layoutX="672.0" layoutY="152.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="95" textFill="RED" />
-      <RadioButton fx:id="radioButton89" layoutX="638.0" layoutY="220.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="87" textFill="RED" />
-      <RadioButton fx:id="radioButton90" layoutX="464.0" layoutY="358.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="60" textFill="RED" />
-      <RadioButton fx:id="radioButton91" layoutX="464.0" layoutY="294.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="75" textFill="RED" />
-      <RadioButton fx:id="radioButton92" layoutX="325.0" layoutY="11.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="108" textFill="RED" />
-      <RadioButton fx:id="radioButton93" layoutX="428.0" layoutY="11.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="109" textFill="RED" />
-      <RadioButton fx:id="radioButton94" layoutX="393.0" layoutY="45.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="104" textFill="RED" />
-      <RadioButton fx:id="radioButton95" layoutX="325.0" layoutY="182.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="90" textFill="RED" />
-      <RadioButton fx:id="radioButton96" layoutX="428.0" layoutY="256.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="78" textFill="RED" />
-      <RadioButton fx:id="radioButton97" layoutX="255.0" layoutY="220.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="82" textFill="RED" />
-      <RadioButton fx:id="radioButton98" layoutX="325.0" layoutY="220.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="83" textFill="RED" />
-      <RadioButton fx:id="radioButton99" layoutX="255.0" layoutY="45.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="103" textFill="RED" />
-      <RadioButton fx:id="radioButton100" layoutX="290.0" layoutY="117.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="97" textFill="RED" />
-      <RadioButton fx:id="radioButton101" layoutX="393.0" layoutY="289.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="74" textFill="RED" />
-      <RadioButton fx:id="radioButton102" layoutX="464.0" layoutY="220.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" text="85" textFill="RED" />
-      <RadioButton fx:id="radioButton103" layoutX="567.0" layoutY="11.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" opacity="0.0" text="110" textFill="RED" />
-      <RadioButton fx:id="radioButton104" layoutX="360.0" layoutY="152.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" opacity="0.0" text="93" textFill="RED" />
-      <RadioButton fx:id="radioButton105" layoutX="500.0" layoutY="117.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" opacity="0.0" text="99" textFill="RED" />
-      <RadioButton fx:id="radioButton106" layoutX="500.0" layoutY="220.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" opacity="0.0" text="86" textFill="RED" />
-      <RadioButton fx:id="radioButton107" layoutX="672.0" layoutY="45.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" opacity="0.0" text="106" textFill="RED" />
-      <RadioButton fx:id="radioButton108" layoutX="464.0" layoutY="45.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" opacity="0.0" text="105" textFill="RED" />
-      <RadioButton fx:id="radioButton109" layoutX="47.0" layoutY="114.0" mnemonicParsing="false" onAction="#onRadioButtonPressed" opacity="0.0" text="96" textFill="RED" />
+      <Rectangle fx:id="player1Rectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="17.0" layoutX="714.0" layoutY="231.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+      <Rectangle fx:id="player2Rectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="17.0" layoutX="714.0" layoutY="481.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
    </children>
 </AnchorPane>

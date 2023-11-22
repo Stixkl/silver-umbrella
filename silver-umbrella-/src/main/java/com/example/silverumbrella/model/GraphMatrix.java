@@ -108,6 +108,44 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
         return true;
     }
 
+    public ArrayList<Integer> dijkstra2(K startNode, K endNode){
+        for (Vertex<K, V> vertex : edges.values()) {
+            if (vertex.getKey().compareTo(startNode) != 0) {
+                vertex.setDistance(infinite);
+            }
+            vertex.setPredecessor(null);
+        }
+        edges.get(startNode).setDistance(0);
+        PriorityQueue<Vertex<K, V>> queue = new PriorityQueue<>(Comparator.comparingInt(Vertex::getDistance));
+        for (Vertex<K, V> vertex : edges.values()) {
+            queue.offer(vertex);
+        }
+        while (!queue.isEmpty()) {
+            Vertex<K, V> u = queue.poll();
+            for (Vertex<K, V> v : edges.values()) {
+                if (adjacent(u.getKey(), v.getKey())) {
+                    int weight = matrix[indexVertex(u.getKey())][indexVertex(v.getKey())].get(0) + u.getDistance();
+                    if (weight < v.getDistance()) {
+                        v.setDistance(weight);
+                        v.setPredecessor(u);
+                        queue.offer(v);
+                    }
+                }
+            }
+        }
+
+        ArrayList<Integer> shortestPath = new ArrayList<>();
+        Vertex<K, V> currentNode = edges.get(endNode);
+        while (currentNode != null && !currentNode.getKey().equals(startNode)) {
+            shortestPath.add((Integer)currentNode.getKey());
+            currentNode = currentNode.getPredecessor();
+        }
+        shortestPath.add((Integer) startNode);
+        Collections.reverse(shortestPath);
+
+        return shortestPath;
+    }
+
     @Override
     public boolean removeArista(K key1, K key2) {
         int vertex1 = indexVertex(key1);

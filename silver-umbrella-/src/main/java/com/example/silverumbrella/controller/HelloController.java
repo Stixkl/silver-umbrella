@@ -2,7 +2,6 @@ package com.example.silverumbrella.controller;
 
 import com.example.silverumbrella.HelloApplication;
 import com.example.silverumbrella.model.GameModeType;
-import com.example.silverumbrella.model.MazeGraph;
 import com.example.silverumbrella.model.Player;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +27,9 @@ public class HelloController {
     @FXML
     private TextField PlayerTwo;
 
+    public HelloController() {
+    }
+
     @FXML
     protected void onButtonClick() {
         String gamemode = Gamemode.getValue();
@@ -47,18 +49,18 @@ public class HelloController {
             Player player2 = new Player(PlayerTwo.getText(), 0);
             mazeController.setPlayer1(player1);
             mazeController.setPlayer2(player2);
+            MazeController gameController = obtainControllerWindow("maze-game.fxml", "maze").getController();
             Stage stage = (Stage) startButton.getScene().getWindow();
             stage.close();
             //HelloApplication.openWindow("maze-game.fxml", 900,700);
-            MazeController gameController = obtainControllerWindow("maze-game", "m").getController();
             gameController.addGamemode(gamemodeType);
-            mazeController.setGamemode(gamemodeType);
+            //mazeController.setGamemode(gamemodeType);
         }
     }
 
     public FXMLLoader obtainControllerWindow(String fxmlName, String stageTitle) {
         Parent rootNode;
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlName + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlName));
 
         Stage newStage = new Stage();
         try {

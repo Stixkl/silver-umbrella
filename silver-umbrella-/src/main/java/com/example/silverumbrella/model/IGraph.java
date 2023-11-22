@@ -17,4 +17,5 @@ public interface IGraph <K extends Comparable<K>,V>{
     boolean addVertex(K key, V value);
     boolean addArista(K key1, K key2, int weight);
     ArrayList<Arista<K, V>> prim();
+    public ArrayList<Integer> dijkstra2(K startNode, K endNode);
 }
