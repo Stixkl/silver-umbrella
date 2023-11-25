@@ -1,15 +1,16 @@
 package com.example.silverumbrella.model;
 
 import java.util.*;
-
 import java.util.stream.Collectors;
+import java.util.Hashtable;
 public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
-    private HashMap<K, Path<K,V>> vertexs;
+
+    private Hashtable<K, Vertex<K,V>> edges;
     private ArrayList<Integer>[][] matrix;
 
     public GraphMatrix(int vertexNumber, EGraph type){
         super(type);
-        vertexs = new HashMap<>();
+        edges = new Hashtable<>();
         matrix = new ArrayList[vertexNumber][vertexNumber];
         int i=0;
         do{
@@ -25,9 +26,9 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
 
     @Override
     public boolean addVertex(K key, V value)  {
-        if(!vertexs.containsKey(key)){
-            vertexs.put(key,new Path<>(key,value));
-            vertexesPosition.put(key,numberVertexsCurrent++);
+        if(!edges.containsKey(key)){
+            edges.put(key,new Vertex<>(key, value));
+            vertexPosition.put(key,vertexNumber++);
             return true;
         }
         return false;
@@ -36,19 +37,19 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
 
     @Override
     public void BFS(K keyVertex) {
-        for (Path<K,V> vertex: vertexs.values()) {
+        for (Vertex<K,V> vertex: edges.values()) {
             vertex.setColor(Color.WHITE);
             vertex.setDistance(infinite);
             vertex.setPredecessor(null);
         }
-        Path<K,V> vertex = vertexs.get(keyVertex);
+        Vertex<K,V> vertex = edges.get(keyVertex);
         vertex.setColor(Color.GRAY);
         vertex.setDistance(0);
-        Queue<Path<K,V>> queue = new LinkedList<>();
+        Queue<Vertex<K,V>> queue = new LinkedList<>();
         queue.offer(vertex);
         while (!queue.isEmpty()){
-            Path<K,V> u = queue.poll();
-            for(Path<K,V> v: vertexs.values()) {
+            Vertex<K,V> u = queue.poll();
+            for(Vertex<K,V> v: edges.values()) {
                 if(adjacent(u.getKey(),v.getKey()) && v.getColor() == Color.WHITE){
                     v.setColor(Color.GRAY);
                     v.setDistance(u.getDistance()+1);
@@ -64,7 +65,7 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
 
     @Override
     public boolean removeVertex(K key) {
-        Path<K,V> vertex = vertexs.remove(key);
+        Vertex<K,V> vertex = edges.remove(key);
         if(vertex != null){
             int index= indexVertex(key);
 
@@ -80,29 +81,69 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
     }
 
     private int indexVertex(K key){
-        Integer index = vertexesPosition.get(key);
-
+        Integer index = vertexPosition.get(key);
         return index == null ? -1 : index;
     }
     @Override
-    public Path<K, V> getVertex(K key) {
-        return vertexs.get(key);
+    public Vertex<K, V> getVertex(K key) {
+        return edges.get(key);
     }
 
     @Override
     public boolean addArista(K key1, K key2, int weight) {
         int vertex1 = indexVertex(key1);
         int vertex2 = indexVertex(key2);
-        matrix[vertex1][vertex2].add(weight);
-        Collections.sort(matrix[vertex1][vertex2]);
-        aristas.add(new Arista<>(vertexs.get(key1),vertexs.get(key2),weight));
-        if(!directed){
+        if (vertex1 != -1 && vertex2 != -1) {
 
-            matrix[vertex2][vertex1].add(weight);
-            Collections.sort(matrix[vertex2][vertex1]);
-            aristas.add(new Arista<>(vertexs.get(key2),vertexs.get(key1),weight));
+            matrix[vertex1][vertex2].add(weight);
+            Collections.sort(matrix[vertex1][vertex2]);
+            aristas.add(new Arista<>(edges.get(key1), edges.get(key2), weight));
+            if (!directed) {
+
+                matrix[vertex2][vertex1].add(weight);
+                Collections.sort(matrix[vertex2][vertex1]);
+                aristas.add(new Arista<>(edges.get(key2), edges.get(key1), weight));
+            }
         }
         return true;
+    }
+
+    public ArrayList<Integer> dijkstra2(K startNode, K endNode){
+        for (Vertex<K, V> vertex : edges.values()) {
+            if (vertex.getKey().compareTo(startNode) != 0) {
+                vertex.setDistance(infinite);
+            }
+            vertex.setPredecessor(null);
+        }
+        edges.get(startNode).setDistance(0);
+        PriorityQueue<Vertex<K, V>> queue = new PriorityQueue<>(Comparator.comparingInt(Vertex::getDistance));
+        for (Vertex<K, V> vertex : edges.values()) {
+            queue.offer(vertex);
+        }
+        while (!queue.isEmpty()) {
+            Vertex<K, V> u = queue.poll();
+            for (Vertex<K, V> v : edges.values()) {
+                if (adjacent(u.getKey(), v.getKey())) {
+                    int weight = matrix[indexVertex(u.getKey())][indexVertex(v.getKey())].get(0) + u.getDistance();
+                    if (weight < v.getDistance()) {
+                        v.setDistance(weight);
+                        v.setPredecessor(u);
+                        queue.offer(v);
+                    }
+                }
+            }
+        }
+
+        ArrayList<Integer> shortestPath = new ArrayList<>();
+        Vertex<K, V> currentNode = edges.get(endNode);
+        while (currentNode != null && !currentNode.getKey().equals(startNode)) {
+            shortestPath.add((Integer)currentNode.getKey());
+            currentNode = currentNode.getPredecessor();
+        }
+        shortestPath.add((Integer) startNode);
+        Collections.reverse(shortestPath);
+
+        return shortestPath;
     }
 
     @Override
@@ -114,7 +155,7 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
             matrix[vertex1][vertex2].remove(0);
             for (Iterator<Arista<K, V>> iterator = aristas.iterator(); iterator.hasNext();) {
                 Arista Arista = iterator.next();
-                if (Arista.getStart().getKey().compareTo(key1) == 0 && Arista.getDestination().getKey().compareTo(key2) == 0) {
+                if (Arista.getinitialVertex().getKey().compareTo(key1) == 0 && Arista.getfinalVertex().getKey().compareTo(key2) == 0) {
                     iterator.remove();
                 }
             }
@@ -122,7 +163,7 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
                 matrix[vertex2][vertex1].remove(0);
                 for (Iterator<Arista<K, V>> iterator = aristas.iterator(); iterator.hasNext();) {
                     Arista Arista = iterator.next();
-                    if (Arista.getStart().getKey().compareTo(key2) == 0 && Arista.getDestination().getKey().compareTo(key1) == 0) {
+                    if (Arista.getinitialVertex().getKey().compareTo(key2) == 0 && Arista.getfinalVertex().getKey().compareTo(key1) == 0) {
                         iterator.remove();
                     }
                 }
@@ -139,23 +180,23 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
     }
     @Override
     public void DFS(){
-        for (Path<K,V> vertex: vertexs.values()) {
+        for (Vertex<K,V> vertex: edges.values()) {
             vertex.setColor(Color.WHITE);
             vertex.setPredecessor(null);
         }
         time = 0;
-        for (Path<K,V> vertex: vertexs.values()) {
+        for (Vertex<K,V> vertex: edges.values()) {
             if(vertex.getColor() == Color.WHITE){
                 DFS(vertex);
             }
         }
     }
 
-    private void DFS(Path<K,V> vertex) {
+    private void DFS(Vertex<K,V> vertex) {
         time++;
         vertex.setDiscoveryTime(time);
         vertex.setColor(Color.GRAY);
-        for(Path<K,V> v: vertexs.values()) {
+        for(Vertex<K,V> v: edges.values()) {
             if(adjacent(vertex.getKey(),v.getKey()) && v.getColor() == Color.WHITE){
                 v.setPredecessor(vertex);
                 DFS(v);
@@ -168,20 +209,20 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
 
 
     @Override
-    public ArrayList<Integer> dijkstra(K keyVertexSource) {
-        for (Path<K,V> vertex: vertexs.values()) {
-            if(vertex.getKey().compareTo(keyVertexSource) != 0)
+    public ArrayList<Integer> dijkstra(K keyedgesource) {
+        for (Vertex<K,V> vertex: edges.values()) {
+            if(vertex.getKey().compareTo(keyedgesource) != 0)
                 vertex.setDistance(infinite);
             vertex.setPredecessor(null);
         }
-        vertexs.get(keyVertexSource).setDistance(0);
-        PriorityQueue<Path<K,V>> queue = new PriorityQueue<>(Comparator.comparingInt(Path::getDistance));
-        for (Path<K,V> vertex: vertexs.values()) {
+        edges.get(keyedgesource).setDistance(0);
+        PriorityQueue<Vertex<K,V>> queue = new PriorityQueue<>(Comparator.comparingInt(Vertex::getDistance));
+        for (Vertex<K,V> vertex: edges.values()) {
             queue.offer(vertex);
         }
         while (!queue.isEmpty()){
-            Path<K,V> u = queue.poll();
-            for(Path<K,V> v: vertexs.values()) {
+            Vertex<K,V> u = queue.poll();
+            for(Vertex<K,V> v: edges.values()) {
                 if(adjacent(u.getKey(),v.getKey())) {
                     int weight = matrix[indexVertex(u.getKey())][indexVertex(v.getKey())].get(0)+u.getDistance();
                     if(weight < v.getDistance()){
@@ -194,7 +235,7 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
             }
         }
 
-        return vertexs.values().stream().map(Path::getDistance).collect(Collectors.toCollection(ArrayList::new));
+        return edges.values().stream().map(Vertex::getDistance).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
@@ -204,8 +245,8 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
         aristas.sort(Comparator.comparingInt(Arista::getWeight));
 
         for(Arista<K,V> Arista: aristas){
-            int keyIndex1= indexVertex(Arista.getStart().getKey());
-            int keyIndex2= indexVertex(Arista.getDestination().getKey());
+            int keyIndex1= indexVertex(Arista.getinitialVertex().getKey());
+            int keyIndex2= indexVertex(Arista.getfinalVertex().getKey());
 
             if(findUnion.find(keyIndex1) != findUnion.find(keyIndex2)){
                 AristasG.add(Arista);
@@ -214,7 +255,8 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
         }
         return AristasG;
     }
-    public void floydWarshall() {
+
+    public void floydMayweather() {
         int n = matrix.length;
         int[][] distance = new int[n][n];
 
@@ -262,13 +304,13 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
         HashSet<K> visited = new HashSet<>();
         PriorityQueue<Arista<K, V>> minHeap = new PriorityQueue<>(Comparator.comparingInt(Arista::getWeight));
         ArrayList<Arista<K, V>> minimumSpanningTree = new ArrayList<>();
-        K startVertex = vertexs.keySet().iterator().next();
+        K startVertex = edges.keySet().iterator().next();
         visited.add(startVertex);
         addAristasToMinHeap(startVertex, minHeap);
-        while (visited.size() < vertexs.size()) {
+        while (visited.size() < edges.size()) {
             Arista<K, V> minArista = minHeap.poll();
-            K fromKey = minArista.getStart().getKey();
-            K toKey = minArista.getDestination().getKey();
+            K fromKey = minArista.getinitialVertex().getKey();
+            K toKey = minArista.getfinalVertex().getKey();
 
             if (!visited.contains(toKey)) {
                 visited.add(toKey);
@@ -285,15 +327,15 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
         for (int i = 0; i < matrix.length; i++) {
             if (matrix[index][i].size() > 0) {
                 K neighborKey = null;
-                for (Map.Entry<K, Integer> entry : vertexesPosition.entrySet()) {
+                for (Map.Entry<K, Integer> entry : vertexPosition.entrySet()) {
                     if (entry.getValue() == i) {
                         neighborKey = entry.getKey();
                         break;
                     }
                 }
                 int weight = matrix[index][i].get(0);
-                if (!minHeap.contains(new Arista<>(vertexs.get(key), vertexs.get(neighborKey), weight))) {
-                    minHeap.add(new Arista<>(vertexs.get(key), vertexs.get(neighborKey), weight));
+                if (!minHeap.contains(new Arista<>(edges.get(key), edges.get(neighborKey), weight))) {
+                    minHeap.add(new Arista<>(edges.get(key), edges.get(neighborKey), weight));
                 }
             }
         }

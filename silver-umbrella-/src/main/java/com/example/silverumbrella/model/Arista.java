@@ -1,29 +1,29 @@
 package com.example.silverumbrella.model;
 
 public class Arista <K extends Comparable<K>,V> {
-    private Path<K, V> destination;
-    private Path<K, V> start;
+    private Vertex<K, V> finalVertex;
+    private Vertex<K, V> initialVertex;
     private int weight;
 
-    public Arista(Path<K, V> start, Path<K, V> destination, int weight) {
-        this.start = start;
-        this.destination = destination;
+    public Arista(Vertex<K, V> initialVertex, Vertex<K, V> finalVertex, int weight) {
+        this.initialVertex = initialVertex;
+        this.finalVertex = finalVertex;
         this.weight = weight;
     }
-    public Path<K, V> getDestination() {
-        return destination;
+    public Vertex<K, V> getfinalVertex() {
+        return finalVertex;
     }
 
-    public void setDestination(Path<K, V> destination) {
-        this.destination = destination;
+    public void setfinalVertex(Vertex<K, V> finalVertex) {
+        this.finalVertex = finalVertex;
     }
 
-    public Path<K, V> getStart() {
-        return start;
+    public Vertex<K, V> getinitialVertex() {
+        return initialVertex;
     }
 
-    public void setStart(Path<K, V> start) {
-        this.start = start;
+    public void setinitialVertex(Vertex<K, V> initialVertex) {
+        this.initialVertex = initialVertex;
     }
 
     public int getWeight() {

@@ -4,16 +4,19 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class Graph <K extends Comparable<K>,V> implements IGraph<K,V> {
-    protected int time, numberVertexsCurrent;
-    protected boolean loops, multiple,directed;
+    protected final HashMap<K, Integer> vertexPosition;
+    protected int time;
+    protected int vertexNumber;
+    protected boolean loops;
+    protected boolean multiple;
+    protected boolean directed;
     protected final Integer infinite;
-    protected final HashMap<K, Integer> vertexesPosition;
     protected LinkedList<Arista<K, V>> aristas;
     protected Graph(EGraph type) {
         aristas = new LinkedList<>();
         time = 0;
-        vertexesPosition = new HashMap<>();
-        numberVertexsCurrent = 0;
+        vertexPosition = new HashMap<>();
+        vertexNumber = 0;
         infinite = Integer.MAX_VALUE;
         selectType(type);
     }
