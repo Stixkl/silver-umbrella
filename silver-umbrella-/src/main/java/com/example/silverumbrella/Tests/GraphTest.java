@@ -1,9 +1,12 @@
+package com.example.silverumbrella.Tests;
+
 import com.example.silverumbrella.model.GraphList;
 import com.example.silverumbrella.model.GraphMatrix;
 import com.example.silverumbrella.model.EGraph;
 import com.example.silverumbrella.model.GameModeType;
 import com.example.silverumbrella.model.GraphList;
 import com.example.silverumbrella.model.GraphMatrix;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,7 +64,7 @@ public class GraphTest {
         setUp3();
 
         boolean expected = list.addVertex(1,1);
-        assertEquals(true, expected);
+        Assertions.assertEquals(true, expected);
     }
 
     @Test
@@ -116,7 +119,7 @@ public class GraphTest {
         setUp3();
         boolean result;
         result = list.removeArista(1,7);
-        assertFalse(result);
+        Assertions.assertFalse(result);
     }
 
 

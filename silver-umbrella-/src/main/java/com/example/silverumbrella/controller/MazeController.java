@@ -319,11 +319,11 @@ public class MazeController implements Initializable {
         if (round % 2 == 0) {
             player1.setPlayerViewNode(key);
             ponderacion1.setText("Ponderacion: " + String.valueOf(steps.get(key).getWeight()));
-            player1.setPoints(steps.get(key).getWeight());
+            player1.setPoints(player1.getPoints() + steps.get(key).getWeight());
         } else {
             player2.setPlayerViewNode(key);
             ponderacion2.setText("Ponderacion: " + String.valueOf(steps.get(key).getWeight()));
-            player2.setPoints(steps.get(key).getWeight());
+            player2.setPoints(player2.getPoints() + steps.get(key).getWeight());
         }
     }
 

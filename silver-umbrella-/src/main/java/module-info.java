@@ -1,6 +1,7 @@
 module com.example.silverumbrella {
     requires javafx.controls;
     requires javafx.fxml;
+    requires org.junit.jupiter.api;
 
 
     opens com.example.silverumbrella to javafx.fxml;
