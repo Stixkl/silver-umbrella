@@ -288,14 +288,17 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
             addAristasToHeap(startVertexKey, minHeap);
             while (visited.size() < edges.size()) {
                 Arista<K, V> minArista = minHeap.poll();
-                K fromKey = minArista.getinitialVertex().getKey();
-                K toKey = minArista.getfinalVertex().getKey();
+                if (minArista != null) {
+                    K fromKey = minArista.getinitialVertex().getKey();
+                    K toKey = minArista.getfinalVertex().getKey();
 
-                if (!visited.contains(toKey)) {
-                    visited.add(toKey);
-                    minimumSpanningTree.add(minArista);
-                    addAristasToHeap(toKey, minHeap);
+                    if (!visited.contains(toKey)) {
+                        visited.add(toKey);
+                        minimumSpanningTree.add(minArista);
+                        addAristasToHeap(toKey, minHeap);
+                    }
                 }
+
             }
 
             return minimumSpanningTree;

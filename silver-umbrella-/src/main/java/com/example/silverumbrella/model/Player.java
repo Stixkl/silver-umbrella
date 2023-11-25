@@ -8,6 +8,7 @@ public class Player {
     private boolean playing = false;
     private boolean finished = false;
     private int kruskal;
+    private int prim;
 
     private int playerViewNode;
 
@@ -16,6 +17,7 @@ public class Player {
         this.points = points;
         dijkstra = 0;
         kruskal = 0;
+        prim = 0;
     }
 
     public int getPlayerActualNode() {
@@ -53,6 +55,23 @@ public class Player {
     public int getDijkstra() {
         return dijkstra;
     }
+
+    public int getKruskal() {
+        return kruskal;
+    }
+
+    public void setKruskal(int kruskal) {
+        this.kruskal = kruskal;
+    }
+
+    public int getPrim() {
+        return prim;
+    }
+
+    public void setPrim(int prim) {
+        this.prim = prim;
+    }
+
     public String getName() {
         return name;
     }
