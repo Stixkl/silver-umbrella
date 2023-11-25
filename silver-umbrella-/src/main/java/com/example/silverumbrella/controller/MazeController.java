@@ -18,6 +18,7 @@ import java.net.URL;
 import com.example.silverumbrella.model.Player;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 import java.security.Key;
 import java.util.*;
@@ -97,7 +98,7 @@ public class MazeController implements Initializable {
         dijkstraPower2.setDisable(true);
         kruskal1.setDisable(true);
         kruskal2.setDisable(true);
-        player1.setPlayerActualNode(3);
+        player1.setPlayerActualNode(20);
         player2.setPlayerActualNode(107);
         playerOneTag.setText("Player: " + player1.getName());
         playerTwoTag.setText("Player: " + player2.getName());
@@ -161,7 +162,7 @@ public class MazeController implements Initializable {
 
                     if (mazeGraph.getGraph().adjacent(player1.getPlayerActualNode(), i)) {
 
-                        if (i == 66 && !player1.isFinished()) {
+                        if (i == 66 && !player2.isFinished()) {
                             player1.setFinished();
                             radioButtons.get(player1.getPlayerActualNode()).setStyle("-fx-background-color: trasparent");
                             player1.setPlayerActualNode(i);
@@ -173,12 +174,16 @@ public class MazeController implements Initializable {
                             player1.setFinished();
                             playerOneTag.setTextFill(Color.RED);
                             playerTwoTag.setTextFill(Color.BLACK);
+
                             round++;
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Congratulations");
                             alert.setHeaderText("Congratulations " + player2.getName() + " you finished");
                             alert.setContentText("You have won the game");
                             alert.showAndWait();
+
+                            Stage stage = (Stage) goButtonPlayer1.getScene().getWindow();
+                            stage.close();
                             return;
                         }
                         if (i == 66 && !player1.isFinished()) {
@@ -238,7 +243,7 @@ public class MazeController implements Initializable {
 
                     if (mazeGraph.getGraph().adjacent(player2.getPlayerActualNode(), i)) {
 
-                        if ( i == 66 && !player2.isFinished()){
+                        if ( i == 66 && !player1.isFinished()){
                             player2.isFinished();
                             radioButtons.get(player2.getPlayerActualNode()).setStyle("-fx-background-color: trasparent");
                             player2.setPlayerActualNode(i);
@@ -256,6 +261,10 @@ public class MazeController implements Initializable {
                             alert.setHeaderText("Congratulations " + player1.getName() + " you finished");
                             alert.setContentText("You finished");
                             alert.showAndWait();
+
+
+                            Stage stage = (Stage) goButtonPlayer1.getScene().getWindow();
+                            stage.close();
                             return;
                         }
                         if (i == 66 && !player2.isFinished()){
@@ -291,14 +300,12 @@ public class MazeController implements Initializable {
             }
 
         }
-        if (round % 10 == 0) {
-            player1.setDijkstra(player1.getDijkstra() + 1);
-            player2.setDijkstra(player2.getDijkstra() + 1);
-        }
-        if (round % 5 == 0) {
-            player1.setKruskal(player1.getKruskal() + 1);
-            player2.setKruskal(player2.getKruskal() + 1);
-        }
+        /**
+        player1.setDijkstra(player1.getDijkstra() + 1);
+        player2.setDijkstra(player2.getDijkstra() + 1);
+        player1.setKruskal(player1.getKruskal() + 1);
+        player2.setKruskal(player2.getKruskal() + 1);
+         */
         playerOnePoints.setText("Points: " + String.valueOf(player1.getPoints()));
         playerTwoPoints.setText("Points: " + String.valueOf(player2.getPoints()));
         round1.setText("Round: " + String.valueOf(round));
@@ -312,9 +319,11 @@ public class MazeController implements Initializable {
         if (round % 2 == 0) {
             player1.setPlayerViewNode(key);
             ponderacion1.setText("Ponderacion: " + String.valueOf(steps.get(key).getWeight()));
+            player1.setPoints(steps.get(key).getWeight());
         } else {
             player2.setPlayerViewNode(key);
             ponderacion2.setText("Ponderacion: " + String.valueOf(steps.get(key).getWeight()));
+            player2.setPoints(steps.get(key).getWeight());
         }
     }
 
@@ -328,7 +337,7 @@ public class MazeController implements Initializable {
         steps = mazeGraph.getGraph().getArista();
         setActionOnRadioButtons();
 
-        radioButtons.get(3).setStyle("-fx-background-color: #ff0000");
+        radioButtons.get(20).setStyle("-fx-background-color: #ff0000");
         radioButtons.get(107).setStyle("-fx-background-color: #00ff00");
     }
 
