@@ -18,9 +18,9 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="700.0" layoutX="692.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="17.0" layoutX="696.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="210.0" />
       <Button fx:id="dijkstraPower1" layoutX="714.0" layoutY="293.0" mnemonicParsing="false" onAction="#onDijkstraButtonClick" prefHeight="44.0" prefWidth="63.0" text="Dijkstra" />
-      <Button fx:id="kruskal1" layoutX="714.0" layoutY="363.0" mnemonicParsing="false" onAction="#onKruskalPressed" prefHeight="44.0" prefWidth="63.0" text="Kruskal" />
+      <Button fx:id="kruskal1" layoutX="714.0" layoutY="598.0" mnemonicParsing="false" onAction="#onKruskalPressed" prefHeight="44.0" prefWidth="63.0" text="Kruskal" />
       <Button fx:id="dijkstraPower2" layoutX="714.0" layoutY="544.0" mnemonicParsing="false" onAction="#onDijkstraButtonClick" prefHeight="44.0" prefWidth="63.0" text="Dijkstra" />
-      <Button fx:id="kruskal2" layoutX="714.0" layoutY="613.0" mnemonicParsing="false" onAction="#onKruskalPressed" prefHeight="44.0" prefWidth="63.0" text="Kruskal" />
+      <Button fx:id="kruskal2" layoutX="714.0" layoutY="350.0" mnemonicParsing="false" onAction="#onKruskalPressed" prefHeight="44.0" prefWidth="63.0" text="Kruskal" />
       <Label fx:id="playerOnePoints" layoutX="742.0" layoutY="257.0" prefHeight="17.0" prefWidth="160.0" text="Label" />
       <Label fx:id="playerTwoPoints" layoutX="746.0" layoutY="506.0" prefHeight="17.0" prefWidth="160.0" text="Label" />
       <Label fx:id="round1" layoutX="815.0" layoutY="231.0" prefHeight="17.0" prefWidth="78.0" text="Round: 0" />

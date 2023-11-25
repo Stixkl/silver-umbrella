@@ -1,13 +1,12 @@
-import com.example.silverumbrella.model.GraphList;
-import com.example.silverumbrella.model.GraphMatrix;
 import com.example.silverumbrella.model.EGraph;
-import com.example.silverumbrella.model.GameModeType;
 import com.example.silverumbrella.model.GraphList;
 import com.example.silverumbrella.model.GraphMatrix;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-public class GraphTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+public class GraphTest1 {
     private GraphMatrix<Integer, Integer> matrix;
     private GraphList<Integer, Integer> list;
 

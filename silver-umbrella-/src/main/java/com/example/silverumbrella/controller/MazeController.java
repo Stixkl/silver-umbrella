@@ -148,11 +148,11 @@ public class MazeController implements Initializable {
             }
 
             if (player1.getKruskal()>0) {
-                kruskal1.setDisable(true);
-                kruskal2.setDisable(false);
-            } else {
                 kruskal1.setDisable(false);
                 kruskal2.setDisable(true);
+            } else {
+                kruskal1.setDisable(true);
+                kruskal2.setDisable(false);
             }
 
             for (int i = 0; i < radioButtons.size(); i++) {
@@ -161,7 +161,7 @@ public class MazeController implements Initializable {
 
                     if (mazeGraph.getGraph().adjacent(player1.getPlayerActualNode(), i)) {
 
-                        if (i == 66) {
+                        if (i == 66 && !player1.isFinished()) {
                             player1.setFinished();
                             radioButtons.get(player1.getPlayerActualNode()).setStyle("-fx-background-color: trasparent");
                             player1.setPlayerActualNode(i);
@@ -170,6 +170,7 @@ public class MazeController implements Initializable {
                             player2.playerChange();
                             goButtonPlayer1.setDisable(true);
                             goButtonPlayer2.setDisable(false);
+                            player1.setFinished();
                             playerOneTag.setTextFill(Color.RED);
                             playerTwoTag.setTextFill(Color.BLACK);
                             round++;
@@ -178,6 +179,9 @@ public class MazeController implements Initializable {
                             alert.setHeaderText("Congratulations " + player2.getName() + " you finished");
                             alert.setContentText("You have won the game");
                             alert.showAndWait();
+                            return;
+                        }
+                        if (i == 66 && !player1.isFinished()) {
                             return;
                         }
 
@@ -221,11 +225,11 @@ public class MazeController implements Initializable {
             }
 
             if (player1.getKruskal()>0) {
-                kruskal1.setDisable(false);
-                kruskal2.setDisable(true);
-            } else {
                 kruskal1.setDisable(true);
                 kruskal2.setDisable(false);
+            } else {
+                kruskal1.setDisable(false);
+                kruskal2.setDisable(true);
             }
 
             for (int i = 0; i < radioButtons.size(); i++) {
@@ -234,7 +238,7 @@ public class MazeController implements Initializable {
 
                     if (mazeGraph.getGraph().adjacent(player2.getPlayerActualNode(), i)) {
 
-                        if ( i == 66){
+                        if ( i == 66 && !player2.isFinished()){
                             player2.isFinished();
                             radioButtons.get(player2.getPlayerActualNode()).setStyle("-fx-background-color: trasparent");
                             player2.setPlayerActualNode(i);
@@ -243,6 +247,7 @@ public class MazeController implements Initializable {
                             player2.playerChange();
                             goButtonPlayer1.setDisable(false);
                             goButtonPlayer2.setDisable(true);
+                            player2.setFinished();
                             playerOneTag.setTextFill(Color.BLACK);
                             playerTwoTag.setTextFill(Color.RED);
                             round++;
@@ -253,6 +258,10 @@ public class MazeController implements Initializable {
                             alert.showAndWait();
                             return;
                         }
+                        if (i == 66 && !player2.isFinished()){
+                            return;
+                        }
+
                         radioButtons.get(player2.getPlayerActualNode()).setStyle("-fx-background-color: trasparent");
                         player2.setPlayerActualNode(i);
                         radioButtons.get(player2.getPlayerActualNode()).setStyle("-fx-background-color: #00ff00");
@@ -332,7 +341,7 @@ public class MazeController implements Initializable {
             try {
                 ArrayList<Integer> path = mazeGraph.getGraph().dijkstra2(player2Node, goal);
                 for (int i = 1; i < path.size(); i++) {
-                    radioButtons.get(path.get(i)).setStyle("-fx-background-color: orange");
+                    radioButtons.get(path.get(i)).setStyle("-fx-background-color: blue");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -347,7 +356,7 @@ public class MazeController implements Initializable {
             try {
                 ArrayList<Integer> path2 = mazeGraph.getGraph().dijkstra2(player1Node, goal);
                 for (int i = 1; i < path2.size(); i++) {
-                    radioButtons.get(path2.get(i)).setStyle("-fx-background-color: blue");
+                    radioButtons.get(path2.get(i)).setStyle("-fx-background-color: orange");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -361,7 +370,7 @@ public class MazeController implements Initializable {
     public void onKruskalPressed() {
 
         if (round % 2 == 0) {
-            player1.setDijkstra(player1.getDijkstra() - 1);
+            player1.setKruskal(player1.getKruskal() - 1);
 
             try {
                 ArrayList<Arista<Integer, RadioButton>> minimumSpanningTree = mazeGraph.getGraph().kruskal2();
@@ -385,12 +394,12 @@ public class MazeController implements Initializable {
                 e.printStackTrace();
             }
 
-            if (player1.getDijkstra() == 0) {
-                dijkstraPower1.setDisable(true);
+            if (player1.getKruskal() == 0) {
+                kruskal1.setDisable(true);
             }
 
         } else {
-            player2.setDijkstra(player2.getDijkstra() - 1);
+            player2.setKruskal(player2.getKruskal() - 1);
 
             try {
                 ArrayList<Arista<Integer, RadioButton>> minimumSpanningTree = mazeGraph.getGraph().kruskal();
@@ -407,8 +416,8 @@ public class MazeController implements Initializable {
                     line.setStroke(Color.ORANGE);
                     line.setStrokeWidth(3);
 
-                    if (player2.getDijkstra() == 0) {
-                        dijkstraPower2.setDisable(true);
+                    if (player2.getKruskal() == 0) {
+                        kruskal2.setDisable(true);
                     }
 
                     count++;
