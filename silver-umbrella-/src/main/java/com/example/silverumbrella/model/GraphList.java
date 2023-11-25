@@ -278,6 +278,30 @@ public class GraphList <K extends Comparable<K>,V> extends Graph<K,V> {
     }
 
     @Override
+    public ArrayList<Arista<K, V>> kruskal2() {
+        int count = 0;
+        if(!directed){
+            ArrayList<Arista<K,V>> mst = new ArrayList<>();
+            Union unionFind = new Union(edges.size());
+            aristas.sort(Comparator.comparingInt(Arista::getWeight));
+            for(Arista<K,V> Arista : aristas){
+
+                if (count > 81){
+                    NewVertexList<K,V> vertex1 = (NewVertexList<K, V>) Arista.getinitialVertex();
+                    NewVertexList<K,V> vertex2 = (NewVertexList<K, V>) Arista.getfinalVertex();
+                    if(unionFind.find(vertexIndex(vertex1.getKey()))!=unionFind.find(vertexIndex(vertex2.getKey()))){
+                        mst.add(Arista);
+                        unionFind.union(vertexIndex(vertex1.getKey()),vertexIndex(vertex2.getKey()));
+                    }
+                }
+                count++;
+            }
+            return mst;
+        }
+        return null;
+    }
+
+    @Override
     public ArrayList<Arista<K, V>> prim() {
         if (!directed) {
             HashSet<K> visited = new HashSet<>();

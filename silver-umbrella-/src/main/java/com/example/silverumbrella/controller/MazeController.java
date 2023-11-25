@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 
 import java.net.URL;
 import com.example.silverumbrella.model.Player;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import java.security.Key;
@@ -57,15 +58,16 @@ public class MazeController implements Initializable {
     @FXML
     private Button dijkstraPower2;
     @FXML
-    private Button jugadorPoder1;
+    private Button kruskal1;
     @FXML
-    private Button jugadorPoder2;
+    private Button kruskal2;
     @FXML
     private Rectangle player1Rectangle;
     @FXML
     private Rectangle player2Rectangle;
 
     private LinkedList<Arista<Integer,RadioButton>> steps;
+
     public MazeController() {
     }
     public GameModeType getGamemode() {
@@ -93,6 +95,8 @@ public class MazeController implements Initializable {
         player2Rectangle.setStroke(Color.RED);
         dijkstraPower1.setDisable(true);
         dijkstraPower2.setDisable(true);
+        kruskal1.setDisable(true);
+        kruskal2.setDisable(true);
         player1.setPlayerActualNode(3);
         player2.setPlayerActualNode(107);
         playerOneTag.setText("Player: " + player1.getName());
@@ -135,12 +139,20 @@ public class MazeController implements Initializable {
         }
 
         if (player1.isPlaying() && !player1.isFinished()) {
-            if (player1.getDijkstra() > 0) {
-                dijkstraPower1.setDisable(false);
-                dijkstraPower2.setDisable(true);
-            } else {
+            if (player2.getDijkstra() > 0) {
+                dijkstraPower2.setDisable(false);
                 dijkstraPower1.setDisable(true);
+            } else {
                 dijkstraPower2.setDisable(true);
+                dijkstraPower1.setDisable(false);
+            }
+
+            if (player1.getKruskal()>0) {
+                kruskal1.setDisable(true);
+                kruskal2.setDisable(false);
+            } else {
+                kruskal1.setDisable(false);
+                kruskal2.setDisable(true);
             }
 
             for (int i = 0; i < radioButtons.size(); i++) {
@@ -200,12 +212,20 @@ public class MazeController implements Initializable {
 
         else {
 
-            if (player2.getDijkstra()>0) {
-                dijkstraPower2.setDisable(false);
-                dijkstraPower1.setDisable(true);
-            } else {
+            if (player1.getDijkstra()>0) {
+                dijkstraPower1.setDisable(false);
                 dijkstraPower2.setDisable(true);
+            } else {
                 dijkstraPower1.setDisable(true);
+                dijkstraPower2.setDisable(false);
+            }
+
+            if (player1.getKruskal()>0) {
+                kruskal1.setDisable(false);
+                kruskal2.setDisable(true);
+            } else {
+                kruskal1.setDisable(true);
+                kruskal2.setDisable(false);
             }
 
             for (int i = 0; i < radioButtons.size(); i++) {
@@ -266,6 +286,10 @@ public class MazeController implements Initializable {
             player1.setDijkstra(player1.getDijkstra() + 1);
             player2.setDijkstra(player2.getDijkstra() + 1);
         }
+        if (round % 5 == 0) {
+            player1.setKruskal(player1.getKruskal() + 1);
+            player2.setKruskal(player2.getKruskal() + 1);
+        }
         playerOnePoints.setText("Points: " + String.valueOf(player1.getPoints()));
         playerTwoPoints.setText("Points: " + String.valueOf(player2.getPoints()));
         round1.setText("Round: " + String.valueOf(round));
@@ -302,9 +326,7 @@ public class MazeController implements Initializable {
 
     public void onDijkstraButtonClick() {
         if (round % 2 == 0) {
-
             player2.setDijkstra(player2.getDijkstra() - 1);
-            boolean flag2 = true;
             int player2Node = player2.getPlayerActualNode();
             int goal = 66;
             try {
@@ -318,11 +340,8 @@ public class MazeController implements Initializable {
             if (player2.getDijkstra() == 0) {
                 dijkstraPower2.setDisable(true);
             }
-
         } else {
-
             player1.setDijkstra(player1.getDijkstra() - 1);
-            boolean flag1 = true;
             int player1Node = player1.getPlayerActualNode();
             int goal = 66;
             try {
@@ -336,54 +355,68 @@ public class MazeController implements Initializable {
             if (player1.getDijkstra() == 0) {
                 dijkstraPower1.setDisable(true);
             }
-
         }
     }
 
-    public void onPrimPressed() {
+    public void onKruskalPressed() {
 
         if (round % 2 == 0) {
+            player1.setDijkstra(player1.getDijkstra() - 1);
 
-            player2.setPrim(player2.getPrim() - 1);
-            boolean flag2 = true;
-            int player2Node = player2.getPlayerActualNode();
-            int goal = 66;
             try {
-                ArrayList<Arista<Integer, RadioButton>> path = mazeGraph.getGraph().kruskal();
-                for (int i = 1; i < path.size(); i++) {
+                ArrayList<Arista<Integer, RadioButton>> minimumSpanningTree = mazeGraph.getGraph().kruskal2();
+                Hashtable<Integer,Line> lines = mazeGraph.getAristasLine();
 
-                    if (path != null) {
-                        radioButtons.get(path.get(i)).setStyle("-fx-background-color: yellow");
-                    }
+                int count1 = 0;
+                int count = 0;
+                for (Arista<Integer, RadioButton> aristas : minimumSpanningTree) {
+                    if (count >= 5) break;
 
+                    int startNode = aristas.getinitialVertex().getKey();
+                    int endNode = aristas.getfinalVertex().getKey();
+
+                    Line line = lines.get(startNode + endNode);
+                    line.setStroke(Color.BLUE);
+                    line.setStrokeWidth(3);
+
+                    count++;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (player2.getPrim() == 0) {
-                dijkstraPower2.setDisable(true);
+
+            if (player1.getDijkstra() == 0) {
+                dijkstraPower1.setDisable(true);
             }
 
         } else {
+            player2.setDijkstra(player2.getDijkstra() - 1);
 
-            player1.setDijkstra(player1.getDijkstra() - 1);
-            boolean flag1 = true;
-            int player1Node = player1.getPlayerActualNode();
-            int goal = 66;
             try {
-                ArrayList<Arista<Integer, RadioButton>> path2 = mazeGraph.getGraph().kruskal();
-                for (int i = 1; i < path2.size(); i++) {
+                ArrayList<Arista<Integer, RadioButton>> minimumSpanningTree = mazeGraph.getGraph().kruskal();
+                Hashtable<Integer,Line> lines = mazeGraph.getAristasLine();
 
-                    if (path2 != null) {
-                        radioButtons.get(path2.get(i)).setStyle("-fx-background-color: purple");
+                int count = 0;
+                for (Arista<Integer, RadioButton> aristas : minimumSpanningTree) {
+                    if (count >= 5) break;
+
+                    int startNode = aristas.getinitialVertex().getKey();
+                    int endNode = aristas.getfinalVertex().getKey();
+
+                    Line line = lines.get(startNode + endNode);
+                    line.setStroke(Color.ORANGE);
+                    line.setStrokeWidth(3);
+
+                    if (player2.getDijkstra() == 0) {
+                        dijkstraPower2.setDisable(true);
                     }
+
+                    count++;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (player1.getPrim() == 0) {
-                dijkstraPower1.setDisable(true);
-            }
+
 
         }
 

@@ -12,6 +12,7 @@ public interface IGraph <K extends Comparable<K>,V>{
     boolean removeArista(K key1, K key2);
     boolean adjacent(K keyV1, K keyV2);
     ArrayList<Arista<K, V>> kruskal();
+    ArrayList<Arista<K, V>> kruskal2();
     ArrayList<Integer> dijkstra(K keyVertex);
     LinkedList<Arista<K, V>> getArista();
     boolean addVertex(K key, V value);

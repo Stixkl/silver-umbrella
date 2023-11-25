@@ -256,6 +256,34 @@ public class GraphMatrix <K extends Comparable<K>,V>  extends Graph<K,V>{
         return AristasG;
     }
 
+    @Override
+    public ArrayList<Arista<K, V>> kruskal2() {
+
+        int count = 0;
+
+        ArrayList<Arista<K,V>> AristasG=new ArrayList();
+        Union findUnion=new Union(matrix.length);
+        aristas.sort(Comparator.comparingInt(Arista::getWeight));
+
+        for(Arista<K,V> Arista: aristas){
+
+            if (count > 81) {
+
+                int keyIndex1 = indexVertex(Arista.getinitialVertex().getKey());
+                int keyIndex2 = indexVertex(Arista.getfinalVertex().getKey());
+
+                if (findUnion.find(keyIndex1) != findUnion.find(keyIndex2)) {
+                    AristasG.add(Arista);
+                    findUnion.union(keyIndex1, keyIndex2);
+                }
+            }
+            count++;
+
+        }
+        return AristasG;
+
+    }
+
     public void floydMayweather() {
         int n = matrix.length;
         int[][] distance = new int[n][n];
