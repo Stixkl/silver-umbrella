@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -47,7 +48,7 @@ public class MazeController implements Initializable {
     private Button goButtonPlayer1;
     @FXML
     private Button goButtonPlayer2;
-    private int round = 0;
+    private int round = 1;
     private MazeGraph mazeGraph;
     @FXML
     private AnchorPane maze;
@@ -77,6 +78,7 @@ public class MazeController implements Initializable {
 
     public static void setPlayer1(Player player) {
         player1 = player;
+        player1.playerChange();
     }
 
     public static void setPlayer2(Player player) {
@@ -98,15 +100,15 @@ public class MazeController implements Initializable {
         playerOnePoints.setText("Points: " + String.valueOf(player1.getPoints()));
         playerTwoPoints.setText("Points: " + String.valueOf(player2.getPoints()));
         if (round % 2 == 0) {
-            goButtonPlayer2.setDisable(true);
-            goButtonPlayer1.setDisable(false);
-            playerOneTag.setTextFill(Color.RED);
-            playerTwoTag.setTextFill(Color.BLACK);
-        } else {
             goButtonPlayer1.setDisable(true);
             goButtonPlayer2.setDisable(false);
             playerOneTag.setTextFill(Color.BLACK);
             playerTwoTag.setTextFill(Color.RED);
+        } else {
+            goButtonPlayer2.setDisable(true);
+            goButtonPlayer1.setDisable(false);
+            playerOneTag.setTextFill(Color.RED);
+            playerTwoTag.setTextFill(Color.BLACK);
         }
     }
 
@@ -122,7 +124,82 @@ public class MazeController implements Initializable {
     }
 
     public void onButtonPressed() {
-        if (round % 2 == 0) {
+
+        if (player2.isFinished() && player1.isFinished()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Congratulations");
+            alert.setHeaderText("Congratulations the game is over");
+            alert.setContentText("You have finished the game");
+            alert.showAndWait();
+            return;
+        }
+
+        if (player1.isPlaying() && !player1.isFinished()) {
+            if (player1.getDijkstra() > 0) {
+                dijkstraPower1.setDisable(false);
+                dijkstraPower2.setDisable(true);
+            } else {
+                dijkstraPower1.setDisable(true);
+                dijkstraPower2.setDisable(true);
+            }
+
+            for (int i = 0; i < radioButtons.size(); i++) {
+
+                if (radioButtons.get(i).isSelected()) {
+
+                    if (mazeGraph.getGraph().adjacent(player1.getPlayerActualNode(), i)) {
+
+                        if (i == 66) {
+                            player1.setFinished();
+                            radioButtons.get(player1.getPlayerActualNode()).setStyle("-fx-background-color: trasparent");
+                            player1.setPlayerActualNode(i);
+                            radioButtons.get(player1.getPlayerActualNode()).setStyle("-fx-background-color: #ff0000");
+                            player1.playerChange();
+                            player2.playerChange();
+                            goButtonPlayer1.setDisable(true);
+                            goButtonPlayer2.setDisable(false);
+                            playerOneTag.setTextFill(Color.RED);
+                            playerTwoTag.setTextFill(Color.BLACK);
+                            round++;
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Congratulations");
+                            alert.setHeaderText("Congratulations " + player2.getName() + " you finished");
+                            alert.setContentText("You have won the game");
+                            alert.showAndWait();
+                            return;
+                        }
+
+                        radioButtons.get(player1.getPlayerActualNode()).setStyle("-fx-background-color: trasparent");
+                        player1.setPlayerActualNode(i);
+                        radioButtons.get(player1.getPlayerActualNode()).setStyle("-fx-background-color: #ff0000");
+                        playerOneTag.setTextFill(Color.RED);
+                        playerTwoTag.setTextFill(Color.BLACK);
+                        round++;
+
+                        player1.playerChange();
+                        player2.playerChange();
+                        goButtonPlayer1.setDisable(true);
+                        goButtonPlayer2.setDisable(false);
+
+
+                    }
+                    else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error This node is not adjacent to the current node");
+                        alert.setContentText("Please, select a node adjacent to the current node");
+                        alert.showAndWait();
+                    }
+
+                }
+
+            }
+
+
+        }
+
+        else {
+
             if (player2.getDijkstra()>0) {
                 dijkstraPower2.setDisable(false);
                 dijkstraPower1.setDisable(true);
@@ -130,26 +207,60 @@ public class MazeController implements Initializable {
                 dijkstraPower2.setDisable(true);
                 dijkstraPower1.setDisable(true);
             }
-            radioButtons.get(player2.getPlayerActualNode()).setStyle("-fx-background-color: #ff0000");
-            goButtonPlayer1.setDisable(true);
-            goButtonPlayer2.setDisable(false);
-            playerOneTag.setTextFill(Color.BLACK);
-            playerTwoTag.setTextFill(Color.RED);
-            round++;
-        } else {
-            if (player1.getDijkstra()>0) {
-                dijkstraPower1.setDisable(false);
-                dijkstraPower2.setDisable(true);
-            } else {
-                dijkstraPower1.setDisable(true);
-                dijkstraPower2.setDisable(true);
+
+            for (int i = 0; i < radioButtons.size(); i++) {
+
+                if (radioButtons.get(i).isSelected()){
+
+                    if (mazeGraph.getGraph().adjacent(player2.getPlayerActualNode(), i)) {
+
+                        if ( i == 66){
+                            player2.isFinished();
+                            radioButtons.get(player2.getPlayerActualNode()).setStyle("-fx-background-color: trasparent");
+                            player2.setPlayerActualNode(i);
+                            radioButtons.get(player2.getPlayerActualNode()).setStyle("-fx-background-color: #00ff00");
+                            player1.playerChange();
+                            player2.playerChange();
+                            goButtonPlayer1.setDisable(false);
+                            goButtonPlayer2.setDisable(true);
+                            playerOneTag.setTextFill(Color.BLACK);
+                            playerTwoTag.setTextFill(Color.RED);
+                            round++;
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Congratulations");
+                            alert.setHeaderText("Congratulations " + player1.getName() + " you finished");
+                            alert.setContentText("You finished");
+                            alert.showAndWait();
+                            return;
+                        }
+                        radioButtons.get(player2.getPlayerActualNode()).setStyle("-fx-background-color: trasparent");
+                        player2.setPlayerActualNode(i);
+                        radioButtons.get(player2.getPlayerActualNode()).setStyle("-fx-background-color: #00ff00");
+                        playerOneTag.setTextFill(Color.BLACK);
+                        playerTwoTag.setTextFill(Color.RED);
+                        round++;
+
+                        player1.playerChange();
+                        player2.playerChange();
+                        goButtonPlayer1.setDisable(false);
+                        goButtonPlayer2.setDisable(true);
+
+
+                    }
+
+                    else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error This node is not adjacent to the current node");
+                        alert.setContentText("Please, select a node adjacent to the current node");
+                        alert.showAndWait();
+                    }
+
+                }
+
+
             }
-            radioButtons.get(player1.getPlayerActualNode()).setStyle("-fx-background-color: #00ff00");
-            goButtonPlayer2.setDisable(true);
-            goButtonPlayer1.setDisable(false);
-            playerOneTag.setTextFill(Color.RED);
-            playerTwoTag.setTextFill(Color.BLACK);
-            round++;
+
         }
         if (round % 10 == 0) {
             player1.setDijkstra(player1.getDijkstra() + 1);
@@ -159,14 +270,17 @@ public class MazeController implements Initializable {
         playerTwoPoints.setText("Points: " + String.valueOf(player2.getPoints()));
         round1.setText("Round: " + String.valueOf(round));
         round2.setText("Round: " + String.valueOf(round));
+
+
+
     }
 
     public void onRadioButtonPressed(int key) {
         if (round % 2 == 0) {
-            player1.setPlayerActualNode(key);
+            player1.setPlayerViewNode(key);
             ponderacion1.setText("Ponderacion: " + String.valueOf(steps.get(key).getWeight()));
         } else {
-            player2.setPlayerActualNode(key);
+            player2.setPlayerViewNode(key);
             ponderacion2.setText("Ponderacion: " + String.valueOf(steps.get(key).getWeight()));
         }
     }
@@ -180,6 +294,9 @@ public class MazeController implements Initializable {
         radioButtons = mazeGraph.returnVertex();
         steps = mazeGraph.getGraph().getArista();
         setActionOnRadioButtons();
+
+        radioButtons.get(3).setStyle("-fx-background-color: #ff0000");
+        radioButtons.get(107).setStyle("-fx-background-color: #00ff00");
     }
 
 
@@ -191,8 +308,8 @@ public class MazeController implements Initializable {
             int goal = 66;
             try {
                 ArrayList<Integer> path2 = mazeGraph.getGraph().dijkstra2(player1Node, goal);
-                for (int i = 0; i < path2.size(); i++) {
-                    radioButtons.get(path2.get(i)).setStyle("-fx-background-color: #00ff00");
+                for (int i = 1; i < path2.size(); i++) {
+                    radioButtons.get(path2.get(i)).setStyle("-fx-background-color: blue");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -207,8 +324,8 @@ public class MazeController implements Initializable {
             int goal = 66;
             try {
                 ArrayList<Integer> path = mazeGraph.getGraph().dijkstra2(player2Node, goal);
-                for (int i = 0; i < path.size(); i++) {
-                    radioButtons.get(path.get(i)).setStyle("-fx-background-color: #ff0000");
+                for (int i = 1; i < path.size(); i++) {
+                    radioButtons.get(path.get(i)).setStyle("-fx-background-color: orange");
                 }
             } catch (Exception e) {
                 e.printStackTrace();

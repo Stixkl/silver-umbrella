@@ -25,10 +25,10 @@
       <Label fx:id="playerTwoPoints" layoutX="746.0" layoutY="506.0" prefHeight="17.0" prefWidth="160.0" text="Label" />
       <Label fx:id="round1" layoutX="815.0" layoutY="231.0" prefHeight="17.0" prefWidth="78.0" text="Round: 0" />
       <Label fx:id="round2" layoutX="815.0" layoutY="480.0" prefHeight="17.0" prefWidth="78.0" text="Round: 0" />
-      <Button fx:id="goButtonPlayer1" layoutX="815.0" layoutY="293.0" mnemonicParsing="false" onAction="#onButtonPressed" prefHeight="44.0" prefWidth="63.0" text="Go" />
+      <Button fx:id="goButtonPlayer1" layoutX="812.0" layoutY="544.0" mnemonicParsing="false" onAction="#onButtonPressed" prefHeight="44.0" prefWidth="63.0" text="Go" />
       <Label fx:id="ponderacion1" layoutX="815.0" layoutY="363.0" text="Label" />
       <Label fx:id="ponderacion2" layoutX="815.0" layoutY="611.0" text="Label" />
-      <Button fx:id="goButtonPlayer2" layoutX="815.0" layoutY="544.0" mnemonicParsing="false" onAction="#onButtonPressed" prefHeight="44.0" prefWidth="63.0" text="Go" />
+      <Button fx:id="goButtonPlayer2" layoutX="812.0" layoutY="293.0" mnemonicParsing="false" onAction="#onButtonPressed" prefHeight="44.0" prefWidth="63.0" text="Go" />
       <Rectangle fx:id="player1Rectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="17.0" layoutX="714.0" layoutY="231.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
       <Rectangle fx:id="player2Rectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="17.0" layoutX="714.0" layoutY="481.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
    </children>
